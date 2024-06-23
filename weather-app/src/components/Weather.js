@@ -25,7 +25,7 @@ function Weather() {
                 value={city}
                 onChange={e => setCity(e.target.value)}
                 placeholder="Ingrese la ciudad"
-                className="focus:outline-none px-5 py-2 rounded-sm block"
+                className="focus:outline-none px-5 py-2 rounded-sm block w-full"
             />
             <button
                 className="rounded-xl bg-gradient-to-br from-[#6025F5] to-[#FF5555] px-5 py-3 text-base font-medium text-white transition duration-200 hover:shadow-lg hover:shadow-[#6025F5]/50 mt-5 mb-5"
@@ -35,16 +35,18 @@ function Weather() {
             </button>
             {weather && weather.cod === 200 && (
                 <div className="bg-gray-700/20 p-5 shadow-2xl border border-white/30 rounded-md">
-                    <h2>
+                    <h2 className="font-bold text-2xl text-slate-200">
                         {weather.name}, {weather.sys.country}
                     </h2>
-                    <p>{weather.weather[0].description}</p>
-                    <p>Temperatura: {weather.main.temp}°C</p>
-                    <p>Humedad: {weather.main.humidity}%</p>
-                    <p>Viento: {weather.wind.speed} m/s</p>
+                    <p className="mt-2 font-semibold text-slate-400">{weather.weather[0].description}</p>
+                    <p className="mt-2 font-semibold text-slate-400">Temperatura: {weather.main.temp}°C</p>
+                    <p className="mt-2 font-semibold text-slate-400">Humedad: {weather.main.humidity}%</p>
+                    <p className="mt-2 font-semibold text-slate-400">Viento: {weather.wind.speed} m/s</p>
                 </div>
             )}
-            {weather && weather.cod !== 200 && <p>Ciudad no encontrada</p>}
+            {weather && weather.cod !== 200 && (
+                <p className="mt-2 font-semibold text-red-400">Ciudad no encontrada</p>
+            )}
         </div>
     )
 }

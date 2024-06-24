@@ -18,7 +18,7 @@ function Footer() {
                     <ul className="mt-8 flex justify-center gap-6 sm:mt-0 lg:justify-end">
                         <li>
                             <a
-                                href="https://instagram.com/c0d3hdz_/"
+                                href="https://www.instagram.com/c0d3hdz_/"
                                 rel="noreferrer"
                                 target="_blank"
                                 className="text-gray-700 transition hover:opacity-75"

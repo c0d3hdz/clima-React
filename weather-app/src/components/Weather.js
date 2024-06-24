@@ -13,6 +13,8 @@ function Weather() {
         try {
             const response = await fetch(url)
             const data = await response.json()
+            console.log(url)
+            console.log(data)
             setWeather(data)
             if (data.weather && data.weather.length > 0) {
                 setWeatherCode(data.weather[0].id)
@@ -39,17 +41,30 @@ function Weather() {
                 Obtener Clima
             </button>
             {weather && weather.cod === 200 && (
-                <div className="bg-gray-700/20 p-5 shadow-2xl border border-white/30 rounded-md">
+                <div className="bg-gray-700/20 p-5 shadow-2xl border border-white/30 rounded-md text-start">
                     <h2 className="font-bold text-2xl text-slate-200">
                         {weather.name}, {weather.sys.country}
                     </h2>
+                    <p className="font-bold text-lg text-white">
+                        {' '}
+                        {new Date(weather.dt * 1000).toLocaleDateString('es-ES', {
+                            day: 'numeric',
+                            month: 'long',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true,
+                        })}
+                    </p>
                     <div className="flex justify-center items-center mt-2">
                         <WeatherIcon weatherCode={weatherCode} />
                         <p className="mt-2 font-semibold text-slate-400">{weather.weather[0].description}</p>
                     </div>
-                    <p className="mt-2 font-semibold text-slate-400">Temperatura: {weather.main.temp}°C</p>
+                    <p className="mt-2 font-semibold text-green-300">Temperatura: {weather.main.feels_like}°C</p>
+                    <p className="-mt-1 text-amber-300 text-sm underline"> {weather.main.temp}°C</p>
                     <p className="mt-2 font-semibold text-slate-400">Humedad: {weather.main.humidity}%</p>
+                    <p className="mt-2 font-semibold text-slate-400">Nubes: {weather.clouds.all}%</p>
                     <p className="mt-2 font-semibold text-slate-400">Viento: {weather.wind.speed} m/s</p>
+                    <p className="mt-2 font-semibold text-slate-400">Visibilidad: {weather.visibility}/ m</p>
                 </div>
             )}
             {weather && weather.cod !== 200 && <p className="mt-2 font-semibold text-red-400">Ciudad no encontrada</p>}

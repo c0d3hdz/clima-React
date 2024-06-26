@@ -1,6 +1,6 @@
 function Footer() {
     return (
-        <footer className="bg-transparent fixed bottom-0 w-full">
+        <footer className="bg-slate-900 w-full  bottom-10">
             <div className="mx-auto max-w-screen-xl px-4 pb-2 sm:px-6 lg:px-8">
                 <div className="border-t border-gray-100 pt-4 sm:flex sm:items-center sm:justify-between">
                     <ul className="flex flex-wrap justify-center gap-4 text-xs lg:justify-end">

@@ -3,11 +3,14 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import WeatherIcon from './WeatherIcon'
 import L from 'leaflet'
+import Forecast from './Forecast'
+import { ReactComponent as CalendarIcon } from '../icons/calendar.svg'
 
 function Weather() {
     const [city, setCity] = useState('')
     const [weather, setWeather] = useState(null)
     const [weatherCode, setWeatherCode] = useState(null)
+    const [showForecast, setShowForecast] = useState(false)
 
     const getWeather = async () => {
         const apiKey = process.env.REACT_APP_WEATHER_API_KEY
@@ -34,6 +37,7 @@ function Weather() {
         }, [coord, map])
         return null
     }
+
     const customIcon = L.icon({
         iconUrl:
             'https://www.openstreetmap.org/assets/leaflet/dist/images/marker-icon-3d253116ec4ba0e1f22a01cdf1ff7f120fa4d89a6cd0933d68f12951d19809b4.png', // URL del icono
@@ -41,11 +45,13 @@ function Weather() {
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
     })
-    function Visibilidad_km({visibility}){
+
+    function Visibilidad_km({ visibility }) {
         return weather.visibility / 1000
     }
+
     return (
-        <div className="bg-sky-700/20 p-7 rounded-md shadow-2xl text-center">
+        <div className="bg-sky-700/20 p-7 rounded-md shadow-2xl text-center relative w-5/6 sm:w-5/6 lg:w-1/3">
             <h1 className="text-center text-4xl font-bold mb-9 text-white">El clima en:</h1>
             <input
                 type="text"
@@ -62,49 +68,80 @@ function Weather() {
             </button>
             {weather && weather.cod === 200 && (
                 <div className="bg-gray-700/20 p-5 shadow-2xl border border-white/30 rounded-md text-start">
-                    <h2 className="font-bold text-2xl text-slate-200">
-                        {weather.name}, {weather.sys.country}
-                    </h2>
-                    <p className="font-bold text-lg text-white">
-                        {new Date(weather.dt * 1000).toLocaleDateString('es-ES', {
-                            day: 'numeric',
-                            month: 'long',
-                            hour: 'numeric',
-                            minute: '2-digit',
-                            hour12: true,
-                        })}
-                    </p>
-                    <div className="flex justify-center items-center mt-2">
-                        <WeatherIcon weatherCode={weatherCode} />
-                        <p className="mt-2 font-semibold text-slate-400">{weather.weather[0].description}</p>
+                    <div className="flex flex-wrap gap-4 justify-between">
+                        <div>
+                            <h2 className="font-bold text-2xl text-slate-200">
+                                {weather.name}, {weather.sys.country}
+                            </h2>
+                            <p className="font-bold text-lg text-white">
+                                {new Date(weather.dt * 1000).toLocaleDateString('es-ES', {
+                                    day: 'numeric',
+                                    month: 'long',
+                                    hour: 'numeric',
+                                    minute: '2-digit',
+                                    hour12: true,
+                                })}
+                            </p>
+                        </div>
+                        <div className="flex justify-center items-center mt-2">
+                            <WeatherIcon weatherCode={weatherCode} />
+                            <p className="mt-2 font-semibold text-slate-400">{weather.weather[0].description}</p>
+                        </div>
                     </div>
                     <p className="mt-2 font-semibold text-green-300">Temperatura: {weather.main.feels_like}°C</p>
                     <p className="-mt-1 text-amber-300 text-sm underline"> {weather.main.temp}°C</p>
-                    <p className="mt-2 font-semibold text-slate-400">Humedad: {weather.main.humidity}%</p>
-                    <p className="mt-2 font-semibold text-slate-400">Nubes: {weather.clouds.all}%</p>
-                    <p className="mt-2 font-semibold text-slate-400">Viento: {weather.wind.speed} m/s</p>
-                    <p className="mt-2 font-semibold text-slate-400">
-                        Visibilidad: {Visibilidad_km(weather.visibility)} Km
-                    </p>
-                    <div className="mt-4 rounded-md overflow-hidden  hover:-translate-y-1 hover:scale-110 transition ease-in-out delay-150 duration-300">
-                        {weather && weather.coord && (
-                            <MapContainer
-                                center={[weather.coord.lat, weather.coord.lon]}
-                                zoom={10}
-                                style={{ height: '200px', width: '250px' }}
-                            >
-                                <TileLayer
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                />
-                                <Marker position={[weather.coord.lat, weather.coord.lon]} icon={customIcon}>
-                                    <Popup>
-                                        {weather.name}, {weather.sys.country}
-                                    </Popup>
-                                </Marker>
-                                <MapUpdater coord={weather.coord} />
-                            </MapContainer>
-                        )}
+
+                    <div className="flex flex-wrap gap-4 justify-between">
+                        <div>
+                            <p className="mt-2 font-semibold text-slate-400">Humedad: {weather.main.humidity}%</p>
+                            <p className="mt-2 font-semibold text-slate-400">Nubes: {weather.clouds.all}%</p>
+                            <p className="mt-2 font-semibold text-slate-400">Viento: {weather.wind.speed} m/s</p>
+                            <p className="mt-2 font-semibold text-slate-400">
+                                Visibilidad: {Visibilidad_km(weather.visibility)} Km
+                            </p>
+                        </div>
+                        <div className="flex items-center mt-4 rounded-md overflow-hidden hover:-translate-y-1 hover:scale-110 transition ease-in-out delay-150 duration-300">
+                            {weather && weather.coord && (
+                                <MapContainer
+                                    center={[weather.coord.lat, weather.coord.lon]}
+                                    zoom={10}
+                                    style={{ height: '200px', width: '250px', zIndex: '10' }}
+                                >
+                                    <TileLayer
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                    />
+                                    <Marker position={[weather.coord.lat, weather.coord.lon]} icon={customIcon}>
+                                        <Popup>
+                                            {weather.name}, {weather.sys.country}
+                                        </Popup>
+                                    </Marker>
+                                    <MapUpdater coord={weather.coord} />
+                                </MapContainer>
+                            )}
+                        </div>
+                    </div>
+                    <div className="mt-3 flex justify-around text-center">
+                        <h2 className="text-center text-2xl font-bold mb-9 text-white">
+                            Pronóstico para los próximos días
+                        </h2>
+                        <button
+                            className=" bg-blue-500 text-white px-3 py-1 rounded flex items-center"
+                            onClick={() => setShowForecast(!showForecast)}
+                        >
+                            {showForecast ? (
+                                <CalendarIcon className="w-5 h-5 mr-1" />
+                            ) : (
+                                <CalendarIcon className="w-5 h-5 mr-1" />
+                            )}
+                        </button>
+                    </div>
+                    <div
+                        className={`transition-all duration-500 ease-in-out ${
+                            showForecast ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                        } mt-5 h-auto overflow-hidden`}
+                    >
+                        {showForecast && <Forecast city={city} />}
                     </div>
                 </div>
             )}

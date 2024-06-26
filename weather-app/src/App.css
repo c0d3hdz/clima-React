@@ -1,9 +1,9 @@
-
 .App {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: start;
+    height: 120vh;
+    margin-top: 5vh;
     background-color: rgb(15 23 42);
 }

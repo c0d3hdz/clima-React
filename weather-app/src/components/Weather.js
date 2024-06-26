@@ -41,7 +41,9 @@ function Weather() {
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
     })
-
+    function Visibilidad_km({visibility}){
+        return weather.visibility / 1000
+    }
     return (
         <div className="bg-sky-700/20 p-7 rounded-md shadow-2xl text-center">
             <h1 className="text-center text-4xl font-bold mb-9 text-white">El clima en:</h1>
@@ -81,7 +83,9 @@ function Weather() {
                     <p className="mt-2 font-semibold text-slate-400">Humedad: {weather.main.humidity}%</p>
                     <p className="mt-2 font-semibold text-slate-400">Nubes: {weather.clouds.all}%</p>
                     <p className="mt-2 font-semibold text-slate-400">Viento: {weather.wind.speed} m/s</p>
-                    <p className="mt-2 font-semibold text-slate-400">Visibilidad: {weather.visibility} m</p>
+                    <p className="mt-2 font-semibold text-slate-400">
+                        Visibilidad: {Visibilidad_km(weather.visibility)} Km
+                    </p>
                     <div className="mt-4 rounded-md overflow-hidden  hover:-translate-y-1 hover:scale-110 transition ease-in-out delay-150 duration-300">
                         {weather && weather.coord && (
                             <MapContainer

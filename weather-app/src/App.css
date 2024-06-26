@@ -4,6 +4,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 120vh;
-    background-color: #13182c;
+    height: 100vh;
+    background-color: rgb(15 23 42);
 }
